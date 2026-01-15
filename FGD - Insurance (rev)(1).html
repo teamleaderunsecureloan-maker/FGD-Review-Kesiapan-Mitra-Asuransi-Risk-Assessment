@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FGD KUPEN SMT 1 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .book-container {
+            width: 100%;
+            max-width: 900px;
+            height: 85vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pages-wrapper {
+            display: flex;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        .page {
+            min-width: 100%;
+            height: 100%;
+            padding: 60px;
+            overflow-y: auto;
+            background: white;
+        }
+
+        .page::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .page::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .page::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        h2 {
+            color: #764ba2;
+            font-size: 22px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            color: #333;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        p, li {
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .emoji {
+            font-size: 18px;
+        }
+
+        strong {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .navigation {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: linear-gradient(to top, rgba(255,255,255,0.98), rgba(255,255,255,0.95));
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            border-top: 1px solid #eee;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .page-indicator {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .cover-page h1 {
+            color: white;
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .cover-page .subtitle {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 1;
+            color: white;
+        }
+
+        .cover-page .info {
+            font-size: 16px;
+            line-height: 2;
+            opacity: 1;
+            color: white;
+        }
+        
+        .cover-page .info p {
+            color: white;
+        }
+
+        .highlight-box {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .critical-box {
+            background: #fff5f5;
+            border-left: 4px solid #e53e3e;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .page {
+                padding: 40px 30px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .navigation {
+                padding: 0 20px;
+            }
+
+            .nav-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="book-container">
+        <div class="pages-wrapper" id="pagesWrapper">
+            <!-- Cover Page -->
+            <div class="page cover-page">
+                <h1>BAHAN FOCUS GROUP DISCUSSION (FGD)</h1>
+                <div class="subtitle">Program KUPEN Semester 1 2026:<br>Review Kesiapan Mitra Asuransi & Risk Assessment</div>
+                <div class="info">
+                    <p><strong>Tanggal:</strong> 7 Januari 2026</p>
+                    <p><strong>Waktu:</strong> 14.00 – 16.00 WIB</p>
+                    <p><strong>Lokasi:</strong> Soeraksan</p>
+                    <p style="margin-top: 30px;"><strong>Peserta:</strong></p>
+                    <p>Divisi Bisnis Pensiun</p>
+                    <p>Departemen Asuransi</p>
+                    <p>Divisi Risk Management</p>
+                </div>
+            </div>
+
+            <!-- Page 1: Tujuan FGD -->
+            <div class="page">
+                <h1>TUJUAN FGD</h1>
+                <p>Focus Group Discussion ini diselenggarakan untuk:</p>
+                <ol>
+                    <li><strong>Membahas kesiapan operasional mitra asuransi</strong> dalam mendukung program KUPEN SMT 1 2026, khususnya terkait track record SLA yang rendah (42,6%) dan rata-rata penyelesaian klaim 214 hari.</li>
+                    <li><strong>Mengidentifikasi gap kritis</strong> antara kapasitas finansial mitra (yang adequate) dengan execution capability (yang sangat rendah).</li>
+                    <li><strong>Menentukan langkah mitigasi konkret</strong> untuk setiap risk yang teridentifikasi, termasuk keputusan tentang penalty clause, risk sharing PEC, dan operational readiness.</li>
+                    <li><strong>Menghasilkan rekomendasi bersama</strong> kepada Divisi Risk Management untuk penyusunan opini formal terkait kesiapan mitra asuransi untuk new disburse tahun 2026.</li>
+                </ol>
+            </div>
+
+            <!-- Page 2: Konteks Program - Overview -->
+            <div class="page">
+                <h1>I. KONTEKS PROGRAM</h1>
+                <h2>A. Overview Program</h2>
+                <table>
+                    <tr>
+                        <th>Aspek</th>
+                        <th>Detail</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Periode Program</strong></td>
+                        <td>Januari - Juni 2026 (6 bulan)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Proyeksi Disburse Baru</strong></td>
+                        <td>Rp 546 Miliar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Proyeksi Net Revenue (Tahun 1)</strong></td>
+                        <td>Rp 9,2 Miliar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Portfolio Eksisting</strong></td>
+                        <td>Rp 20 Triliun (105.310 debitur)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Median Tenor</strong></td>
+                        <td>9 tahun</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Max Entry Age</strong></td>
+                        <td>65 tahun (dengan MCU wajib di atas 63 Tahun)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Outstanding Klaim</strong></td>
+                        <td>~Rp 1 Triliun (belum terselesaikan)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rata-rata Klaim per Bulan</strong></td>
+                        <td>Rp 30-40 Miliar</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Page 3: Rasional Program -->
+            <div class="page">
+                <h2>B. Rasional Program</h2>
+                <p>Program ini bukan semata untuk pertumbuhan, tetapi merupakan <strong>managed decline strategy</strong> dengan tujuan:</p>
+                <ol>
+                    <li><strong>Menjaga keberlanjutan kemitraan</strong> dengan PT ASABRI dan PT Taspen</li>
+                    <li><strong>Mitigasi risiko sistemik</strong> dari portfolio legacy Rp 20T yang tidak akan selesai dalam 2-3 tahun (median tenor 9 tahun)</li>
+                    <li><strong>Maintain fee-based income</strong> sambil melakukan transformasi portofolio bertahap</li>
+                    <li><strong>Mencegah service overload</strong> di cabang akibat portfolio besar tanpa disburse baru</li>
+                </ol>
+                <div class="critical-box">
+                    <p><strong>PENTING:</strong> Tanpa program yang terstruktur, risiko komplain nasabah eksisting, penurunan kualitas layanan, dan putusnya kemitraan strategis akan meningkat signifikan.</p>
+                </div>
+            </div>
+
+            <!-- Page 4: Status Due Diligence -->
+            <div class="page">
+                <h2>C. Status Due Diligence</h2>
+                <p>Divisi Bisnis telah melakukan due diligence dengan Departemen Asuransi:</p>
+                
+                <h3>1. Opini Pertama (22 Des 2025):</h3>
+                <ul>
+                    <li>Kesimpulan: Usia 63 tahun ke atas masih layak dengan MCU wajib</li>
+                    <li>Diversifikasi mitra (Heksa + CAR Life)</li>
+                </ul>
+
+                <h3>2. Opini Lanjutan (30 Des 2025):</h3>
+                <ul>
+                    <li>Detail profil mitra asuransi (financial health, kapasitas, track record)</li>
+                    <li><strong>CRITICAL FINDING</strong>: Track record SLA sangat buruk (42,6% ketepatan, rata-rata 214 hari)</li>
+                </ul>
+
+                <div class="critical-box">
+                    <p><strong>NAMUN:</strong> Masih ada <strong>gap signifikan</strong> antara opini yang diberikan dengan operational readiness yang diperlukan untuk launch program. <strong>FGD ini bertujuan untuk close gap tersebut.</strong></p>
+                </div>
+            </div>
+
+            <!-- Page 5: Critical Findings -->
+            <div class="page">
+                <h1>II. CRITICAL FINDINGS - MAJOR CONCERNS</h1>
+                <h2>Summary Risk Assessment:</h2>
+                <table>
+                    <tr>
+                        <th>Risk Category</th>
+                        <th>Status</th>
+                        <th>Severity</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Kapasitas Finansial</strong></td>
+                        <td>✅ Adequate (RBC > 120%)</td>
+                        <td>LOW</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SLA Performance</strong></td>
+                        <td>❌ Sangat Buruk (42,6%)</td>
+                        <td>🔴 CRITICAL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Outstanding Rp 1T</strong></td>
+                        <td>❌ Tidak Clear</td>
+                        <td>🔴 CRITICAL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Commitment Letter & Penalty</strong></td>
+                        <td>❌ Tidak Ada</td>
+                        <td>🔴 HIGH</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Risiko PEC</strong></td>
+                        <td>⚠️ Bank Tanggung Sendirian</td>
+                        <td>🔴 HIGH</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Early Warning System</strong></td>
+                        <td>⚠️ Belum Operasional</td>
+                        <td>MEDIUM</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SOP Detail Implementasi</strong></td>
+                        <td>⚠️ Belum Jelas</td>
+                        <td>MEDIUM</td>
+                    </tr>
+                </table>
+                <div class="critical-box">
+                    <p><strong>BOTTOM LINE:</strong> Mitra asuransi secara <strong>finansial capable</strong> (RBC sehat, rating A+, kapasitas adequate), tetapi <strong>operationally unreliable</strong> (SLA hanya 42,6%, delay rata-rata 7 bulan). Ini adalah <strong>fundamental mismatch</strong> yang perlu decisive action.</p>
+                </div>
+            </div>
+
+            <!-- Page 6: Topik 1 - Kapasitas Finansial -->
+            <div class="page">
+                <h1>III. TOPIK PEMBAHASAN FGD</h1>
+                <h2>TOPIK 1: KAPASITAS FINANSIAL MITRA ASURANSI</h2>
+                
+                <h3>A. Mengapa Topik Ini Penting?</h3>
+                <p>Sebelum membahas operational issues, kita perlu <strong>memastikan bahwa fondasi finansial mitra asuransi solid</strong>.</p>
+
+                <h3>B. Data yang Tersedia</h3>
+                
+                <p style="margin-top: 20px; margin-bottom: 10px; font-weight: 600;">Data Finansial (IDR Juta)</p>
+                <table>
+                    <tr>
+                        <th>Indikator</th>
+                        <th>Heksa</th>
+                        <th>CAR</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Investment</strong></td>
+                        <td>1,008,384</td>
+                        <td>10,887,202</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Asset</strong></td>
+                        <td>874,075</td>
+                        <td>11,485,626</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Liability</strong></td>
+                        <td>92,135</td>
+                        <td>8,072,009</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Equity</strong></td>
+                        <td>237,307</td>
+                        <td>3,459,249</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Premium Nett</strong></td>
+                        <td>1,162,998</td>
+                        <td>1,778,047</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Profit/Loss</strong></td>
+                        <td>14,364</td>
+                        <td>207,319</td>
+                    </tr>
+                </table>
+
+                <p style="margin-top: 30px; margin-bottom: 10px; font-weight: 600;">Rasio Keuangan</p>
+                <table>
+                    <tr>
+                        <th>Ratio</th>
+                        <th>Heksa</th>
+                        <th>CAR</th>
+                    </tr>
+                    <tr style="background-color: #e6f3ff;">
+                        <td><strong>RBC</strong></td>
+                        <td><strong>341.05%</strong></td>
+                        <td><strong>253.00%</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Current Ratio</strong></td>
+                        <td>9.49</td>
+                        <td>2.84</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cash Ratio</strong></td>
+                        <td>0.12</td>
+                        <td>0.54</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DER</strong></td>
+                        <td>0.26</td>
+                        <td>2.34</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DAR</strong></td>
+                        <td>0.06</td>
+                        <td>0.70</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RoA</strong></td>
+                        <td>1.45%</td>
+                        <td>0.23%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RoE</strong></td>
+                        <td>6.17%</td>
+                        <td>0.77%</td>
+                    </tr>
+                </table>
+
+                <h3>C. Opini Departemen Asuransi</h3>
+                <ul>
+                    <li>Kedua mitra (Heksa & CAR Life) memiliki RBC di atas 120%</li>
+                    <li>Mitra asuransi menyatakan "masih mampu menanggung risiko" untuk portfolio KUPEN</li>
+                    <li>Rencana diversifikasi dengan penambahan CAR Life untuk memperluas kapasitas</li>
+                </ul>
+
+                <h3>D. Expected Output Topik 1</h3>
+                <div class="highlight-box">
+                    <p>Berdasarkan rasio keuangan mitra (termasuk Heksa dan CAR), posisi <strong>RBC masih berada di atas 120%</strong>. Namun, belum jelas apakah indikator ini cukup merefleksikan <strong>kemampuan riil mitra dalam memenuhi kewajiban pembayaran klaim</strong>, atau masih diperlukan <strong>stress test tambahan</strong> untuk menguji ketahanan likuiditas dan kapasitas bayar dalam kondisi tekanan, terutama di tengah tingginya outstanding klaim.</p>
+                </div>
+            </div>
+
+            <!-- Page 7: Topik 2 - SLA Performance (Part 1) -->
+            <div class="page">
+                <h2>TOPIK 2: SLA PERFORMANCE SANGAT RENDAH</h2>
+                
+                <h3>A. Mengapa Topik Ini Paling Kritis?</h3>
+                <p>Track record SLA 42,6% dengan rata-rata penyelesaian <strong>214 hari (7 bulan)</strong> jadi poin krusial dalam program ini.</p>
+
+                <h3>B. Data Faktual</h3>
+                <p><strong>Current Status:</strong></p>
+                <ul>
+                    <li><strong>Rata-rata penyelesaian: 214 hari</strong></li>
+                    <li><strong>Ketepatan SLA: 42,6%</strong></li>
+                    <li><strong>57,4% klaim terlambat</strong> dengan delay rata-rata 7 Bulan</li>
+                </ul>
+            </div>
+
+            <!-- Page 8: Topik 2 - SLA Performance (Part 2) -->
+            <div class="page">
+                <h3>C. Root Cause Analysis (Perlu di kaji kembali)</h3>
+                <p><strong>Possible causes:</strong></p>
+
+                <p><strong>a) Incomplete documentation dari Bank</strong></p>
+                <ul>
+                    <li>Apakah dokumentasi yang dikirim Bank sering tidak lengkap?</li>
+                    <li>Apakah perlu training untuk Unit Bisnis tentang dokumen requirements?</li>
+                </ul>
+
+                <p><strong>b) Systemic capacity issue di mitra</strong></p>
+                <ul>
+                    <li>Apakah mitra understaffed untuk handle volume claims?</li>
+                    <li>Apakah ada backlog yang menumpuk?</li>
+                </ul>
+
+                <p><strong>c) Cash flow issue di mitra</strong></p>
+                <ul>
+                    <li>Apakah delay disebabkan oleh cash flow problem mitra?</li>
+                </ul>
+
+                <p><strong>d) Operational inefficiency di mitra</strong></p>
+                <ul>
+                    <li>Apakah penyelesaian klaim di mitra <strong>terlalu banyak tahapan, persetujuan, dan meja yang harus dilewati</strong>?</li>
+                </ul>
+
+                <p><strong>e) Pre-Existing Condition (PEC)</strong></p>
+                <ul>
+                    <li>Apakah delay 214 hari sebagian besar disebabkan oleh <strong>investigasi PEC</strong>?</li>
+                    <li>Apakah 72% rejection rate PEC menunjukkan bahwa <strong>mayoritas klaim masuk kategori "suspicious"</strong> yang memicu investigasi panjang?</li>
+                </ul>
+            </div>
+
+            <!-- Page 9: Topik 2 - Output -->
+            <div class="page">
+                <h3>D. Expected Output Topik 2</h3>
+                <div class="highlight-box">
+                    <p><strong>ROOT CAUSE CLARITY:</strong> Beberapa kondisi di atas perlu dianalisis lebih lanjut untuk memastikan faktor mana yang paling berpengaruh terhadap keterlambatan pembayaran klaim asuransi. Identifikasi penyebab utama keterlambatan SLA ini akan menjadi fondasi penting bagi perbaikan kinerja pembayaran klaim ke depan.</p>
+                </div>
+            </div>
+
+            <!-- Page 10: Topik 3 - Commitment Letter (Part 1) -->
+            <div class="page">
+                <h2>TOPIK 3: BELUM ADA COMMITMENT LETTER & PENALTY CLAUSE</h2>
+                
+                <h3>A. Mengapa Topik Ini Penting?</h3>
+                <p>Tanpa commitment letter dan penalty clause, Bank <strong>tidak punya enforcement mechanism</strong> untuk force mitra comply dengan SLA. Ini seperti <strong>kontrak tanpa konsekuensi</strong> → mitra bisa delay payment tanpa fear of penalty.</p>
+
+                <div class="critical-box">
+                    <p><strong>Historical Evidence:</strong> Outstanding Rp 1T yang exist sekarang adalah <strong>bukti nyata</strong> bahwa tanpa enforcement mechanism, mitra bisa delay payment dan akumulasi terjadi tanpa kontrol.</p>
+                </div>
+            </div>
+
+            <!-- Page 11: Topik 3 - Commitment Letter (Part 2) -->
+            <div class="page">
+                <h3>B. Current Status</h3>
+                
+                <p><strong>Commitment Letter:</strong></p>
+                <ul>
+                    <li>Dept Asuransi menyatakan: "Commitment letter <strong>belum diberikan</strong> dari mitra asuransi terkait penyelesaian klaim untuk periode 2026"</li>
+                    <li>Tidak ada dokumen formal yang guarantee:
+                        <ul>
+                            <li>Kapasitas penjaminan untuk Rp 546M disburse baru</li>
+                            <li>SLA 7-14 hari atau target improvement</li>
+                            <li>Tidak akan ada akumulasi outstanding</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <p><strong>Penalty Clause:</strong></p>
+                <ul>
+                    <li>Perjanjian saat ini <strong>tidak ada penalty clause</strong></li>
+                    <li>Mitra tidak punya <strong>disincentive</strong> untuk lambat bayar</li>
+                    <li>Bank tidak bisa enforce SLA secara kontraktual</li>
+                </ul>
+
+                <h3>C. Expected Output Topik 3</h3>
+                <div class="highlight-box">
+                    <p><strong>ROOT CAUSE CLARITY:</strong> Ketiadaan <strong>commitment letter</strong> dan <strong>penalty clause</strong> membuat Bank tidak memiliki <strong>enforcement mechanism</strong> untuk memastikan mitra asuransi mematuhi SLA pembayaran klaim. Tanpa jaminan kapasitas, target penyelesaian, dan konsekuensi keterlambatan, mitra dapat menunda pembayaran tanpa risiko kontraktual, yang terbukti secara historis memicu akumulasi outstanding klaim dalam skala besar.</p>
+                </div>
+            </div>
+
+            <!-- Page 12: Topik 4 - Risiko PEC (Part 1) -->
+            <div class="page">
+                <h2>TOPIK 4: BANK MENANGGUNG RISIKO PEC TIDAK TERDETEKSI</h2>
+                
+                <h3>A. Mengapa Topik Ini Sensitif?</h3>
+                <p>Pre-Existing Condition (PEC) adalah <strong>70%+ penyebab klaim rejected</strong>.</p>
+
+                <h3>B. Current Status</h3>
+                <ul>
+                    <li>Jika klaim ditolak karena PEC → <strong>BANK yang menanggung risiko kerugian</strong></li>
+                    <li>Mitra asuransi <strong>tidak bertanggung jawab</strong></li>
+                </ul>
+
+                <p><strong>Current Mitigation:</strong></p>
+                <ul>
+                    <li>MCU wajib untuk usia 63 tahun ke atas</li>
+                    <li>SPK harus diisi jujur dan lengkap</li>
+                    <li>Validasi SPK oleh komite berwenang</li>
+                </ul>
+            </div>
+
+            <!-- Page 13: Topik 4 - Risiko PEC (Part 2) -->
+            <div class="page">
+                <p><strong>Gap Mitigation (Yang tidak ada):</strong></p>
+                <ul>
+                    <li><strong>Tidak ada risk sharing</strong> dengan mitra (Bank tanggung 100% risiko)</li>
+                    <li><strong>Tidak ada dispute resolution mechanism</strong> (keputusan mitra = final, no appeal)</li>
+                    <li><strong>Tidak ada "second opinion" medical review</strong> (jika borderline case)</li>
+                    <li><strong>Bank tidak punya leverage</strong> untuk force mitra bayar jika disputed case</li>
+                    <li><strong>Kejelasan Juknis</strong> Implementasi di Unit Bisnis</li>
+                </ul>
+
+                <h3>C. Expected Output Topik 4</h3>
+                <div class="highlight-box">
+                    <p><strong>ROOT CAUSE CLARITY:</strong> Skema pengelolaan risiko <strong>Pre-Existing Condition (PEC)</strong> saat ini belum dilengkapi dengan mekanisme <strong>risk sharing, dispute resolution, dan second opinion medis</strong>, sehingga Bank menanggung penuh risiko klaim yang ditolak tanpa memiliki kontrol atau alat untuk memverifikasi dan membantah keputusan mitra asuransi. Kondisi ini membuat perlindungan asuransi menjadi tidak efektif dalam melindungi eksposur risiko Bank.</p>
+                </div>
+            </div>
+
+            <!-- Page 14: Topik 5 - EWS (Part 1) -->
+            <div class="page">
+                <h2>TOPIK 5: EARLY WARNING SYSTEM BELUM OPERASIONAL</h2>
+                
+                <h3>A. Mengapa EWS Penting?</h3>
+                <p>Dengan track record SLA 42,6% (57,4% terlambat), Bank <strong>harus punya visibility real-time</strong> tentang status klaim. Tanpa EWS, keterlambatan payment baru ketahuan setelah <strong>tagihan makin menumpuk</strong> → ini adalah <strong>reactive management</strong>, bukan proactive.</p>
+
+                <h3>B. Current Status</h3>
+                <p><strong>Dari Opini Dept Asuransi:</strong></p>
+                <ul>
+                    <li>"EWS akan dikembangkan pada tahun 2026"</li>
+                    <li><strong>Tidak clear: Q1 atau Q2 2026?</strong></li>
+                    <li><strong>Tidak clear: Apa yang dimonitor saat EWS belum ready?</strong></li>
+                </ul>
+
+                <p><strong>Tanpa EWS (Current State):</strong></p>
+                <ul>
+                    <li>Keterlambatan payment baru ketahuan setelah >30 hari</li>
+                    <li>Tidak ada trigger untuk eskalasi dini ke mitra</li>
+                    <li>Akumulasi outstanding bisa terjadi tanpa detection dini</li>
+                    <li>Management tidak punya real-time dashboard</li>
+                    <li>Tidak bisa identify bottleneck di process</li>
+                </ul>
+            </div>
+
+            <!-- Page 15: Topik 5 - EWS (Part 2) -->
+            <div class="page">
+                <p><strong>Dengan EWS (Ideal State):</strong></p>
+                <ul>
+                    <li>Alert otomatis jika klaim >7 hari belum ada progress update dari mitra</li>
+                    <li>Dashboard real-time: Jumlah klaim pending, aging analysis, bottleneck identification</li>
+                    <li>Auto-escalation jika >14 hari tanpa resolution</li>
+                    <li>Predictive analytics: Forecast outstanding accumulation risk</li>
+                    <li>Weekly/monthly report otomatis ke management</li>
+                </ul>
+
+                <h3>C. Expected Output Topik 5</h3>
+                <div class="highlight-box">
+                    <p><strong>ROOT CAUSE CLARITY:</strong> Proyek EWS perlu disusun secara lebih detail dan terstruktur, baik dari sisi timeline pelaksanaannya maupun ruang lingkup pengembangan fitur yang akan dibangun untuk memastikan aplikasi ini benar-benar mampu mendukung kebutuhan analisis dan mitigasi risiko.</p>
+                </div>
+            </div>
+
+            <!-- Page 16: Topik 6 - SOP Detail (Part 1) -->
+            <div class="page">
+                <h2>TOPIK 6: TIDAK ADA SOP DETAIL UNTUK IMPLEMENTASI DI CABANG</h2>
+                
+                <h3>A. Mengapa SOP Detail Sangat Penting?</h3>
+                <p>MCU wajib untuk usia 63 tahun ke atas, tanpa SOP yang sangat detail, akan terjadi <strong>execution chaos</strong> di cabang:</p>
+                <ul>
+                    <li>Cabang A arrange MCU di RS X (charge ke debitur)</li>
+                    <li>Cabang B arrange MCU di Klinik Y (gratis dari Bank)</li>
+                    <li>Cabang C Komite sendiri yang "interpret" hasil lab → approve yang seharusnya reject</li>
+                </ul>
+
+                <div class="critical-box">
+                    <p><strong>Result:</strong> Inconsistent customer experience, potential mis-selling, komplain ketidakadilan, risiko legal.</p>
+                </div>
+            </div>
+
+            <!-- Page 17: Topik 6 - SOP Detail (Part 2) -->
+            <div class="page">
+                <h3>B. Current Status</h3>
+                <p><strong>Dari Opini Dept Asuransi:</strong> "Implementasi di Unit Bisnis dapat dilakukan secara <strong>bertahap melalui Pilot Project</strong> di Unit tertentu atau melalui <strong>pelatihan khusus</strong> bagi PIC Kantor Pusat"</p>
+
+                <p><strong>Artinya (translation):</strong></p>
+                <ul>
+                    <li><strong>Belum ada SOP detail</strong> yang ready untuk rollout</li>
+                    <li><strong>Belum jelas Unit Bisnis mana</strong> yang akan jadi pilot project</li>
+                    <li><strong>Belum jelas jadwal training</strong> dan siapa yang akan di-train</li>
+                    <li><strong>Belum jelas PIC Kantor Pusat</strong> untuk escalation point</li>
+                </ul>
+
+                <h3>C. Expected Output Topik 6</h3>
+                <div class="highlight-box">
+                    <p><strong>ROOT CAUSE CLARITY:</strong> Belum tersedianya <strong>SOP operasional yang rinci dan siap pakai</strong> untuk implementasi di cabang membuat kebijakan (seperti kewajiban MCU) berisiko dijalankan secara berbeda-beda, bergantung pada interpretasi masing-masing unit. Tanpa penetapan <strong>alur, PIC, pilot unit, dan mekanisme eskalasi yang jelas</strong>, potensi inkonsistensi, kesalahan keputusan, dan risiko hukum akan tetap tinggi meskipun kebijakan pusat sudah ditetapkan.</p>
+                </div>
+            </div>
+
+            <!-- End Page -->
+            <div class="page cover-page">
+                <h1>TERIMA KASIH</h1>
+                <div class="subtitle">Mari kita diskusikan bersama untuk menemukan solusi terbaik</div>
+                <div class="info" style="margin-top: 50px;">
+                    <p style="font-size: 18px;">📋 Total 6 Topik Pembahasan</p>
+                    <p style="font-size: 18px;">🎯 Focus: Kesiapan Operasional Mitra</p>
+                    <p style="font-size: 18px;">⚠️ Critical Issues yang Perlu Decisive Action</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="previousPage()">← Previous</button>
+            <div class="page-indicator">
+                <span id="currentPage">1</span> / <span id="totalPages">18</span>
+            </div>
+            <button class="nav-btn" id="nextBtn" onclick="nextPage()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 0;
+        const pagesWrapper = document.getElementById('pagesWrapper');
+        const pages = document.querySelectorAll('.page');
+        const totalPages = pages.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentPageSpan = document.getElementById('currentPage');
+        const totalPagesSpan = document.getElementById('totalPages');
+
+        totalPagesSpan.textContent = totalPages;
+
+        function updatePage() {
+            pagesWrapper.style.transform = `translateX(-${currentPage * 100}%)`;
+            currentPageSpan.textContent = currentPage + 1;
+            
+            prevBtn.disabled = currentPage === 0;
+            nextBtn.disabled = currentPage === totalPages - 1;
+
+            // Scroll to top of current page
+            pages[currentPage].scrollTop = 0;
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                updatePage();
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                updatePage();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextPage();
+            } else if (e.key === 'ArrowLeft') {
+                previousPage();
+            }
+        });
+
+        // Touch swipe navigation
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        pagesWrapper.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        pagesWrapper.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextPage();
+            }
+            if (touchEndX > touchStartX + 50) {
+                previousPage();
+            }
+        }
+
+        // Initialize
+        updatePage();
+    </script>
+</body>
+</html>
